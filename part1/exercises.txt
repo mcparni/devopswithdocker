@@ -28,7 +28,7 @@ Secret message is: 'You can find the source code here: https://github.com/docker
 
 # docker run -d -it --name curler ubuntu sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
 # docker exec -it curler bash
-# apt-get update; apt-get install curl
+# apt-get -y update; apt-get -y install curl
 # exit
 # docker attach curler
 # helsinki.fi
@@ -57,5 +57,28 @@ You found the correct password. Secret message is:
 "This is the secret message"
 
 
+1.7: Two line Dockerfile
 
+-- Dockerfile :
 
+FROM devopsdockeruh/simple-web-service:alpine
+CMD server
+
+-- Commands :
+
+# docker build . -t simple-web-service:web-server
+# docker run simple-web-service:web-server
+
+1.8: Image for script
+
+-- Dockerfile :
+
+FROM ubuntu:18.04
+RUN apt-get -y update; apt-get -y install curl
+CMD echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;
+
+-- Commands :
+
+# sudo docker build . -t ubuntu:curler
+# sudo docker run -it ubuntu:curler
+# helsinki.fi
