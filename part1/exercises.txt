@@ -1,6 +1,6 @@
 1.1: Getting started
 
-docker ps -a
+# docker ps -a
 
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
 d9215fbe691e        nginx               "/docker-entrypoin..."   2 minutes ago       Up 2 minutes               80/tcp              pensive_nightingale
@@ -10,10 +10,52 @@ bacbb1431ba5        nginx               "/docker-entrypoin..."   2 minutes ago  
 
 1.2: Cleanup
 
-docker ps -a
+# docker ps -a
 
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
-docker images
+# docker images
 
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+
+
+1.3: Secret message
+	
+Secret message is: 'You can find the source code here: https://github.com/docker-hy'
+
+
+1.4: Missing dependencies
+
+# docker run -d -it --name curler ubuntu sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
+# docker exec -it curler bash
+# apt-get update; apt-get install curl
+# exit
+# docker attach curler
+# helsinki.fi
+
+1.5: Sizes of images
+
+# docker run -d -it --name alpine_test devopsdockeruh/simple-web-service:alpine
+# docker images
+
+devopsdockeruh/simple-web-service   ubuntu              4e3362e907d5        2 months ago        83MB
+devopsdockeruh/simple-web-service   alpine              fd312adc88e0        2 months ago        15.7MB
+
+# tail -f text.log
+# docker exec -it alpine_test sh
+
+Secret message is: 'You can find the source code here: https://github.com/docker-hy'
+
+1.6: Hello Docker Hub
+
+1. Go with browser to docker hub and search devopsdockeruh/pull_exercise
+2. The solution already reads under overview tab. On the right side under Source Repository there is a link to github.com to the source code and Dockerfile
+In the terminal:
+# docker run -it devopsdockeruh/pull_exercise
+# basics
+You found the correct password. Secret message is:
+"This is the secret message"
+
+
+
+
