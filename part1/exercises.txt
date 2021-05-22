@@ -1,0 +1,19 @@
+1.1: Getting started
+
+docker ps -a
+
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
+d9215fbe691e        nginx               "/docker-entrypoin..."   2 minutes ago       Up 2 minutes               80/tcp              pensive_nightingale
+bacbb1431ba5        nginx               "/docker-entrypoin..."   2 minutes ago       Exited (0) 2 seconds ago                       ecstatic_pare
+05c799d1ffc7        nginx               "/docker-entrypoin..."   4 minutes ago       Exited (0) 9 seconds ago                       elegant_pike
+
+
+1.2: Cleanup
+
+docker ps -a
+
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+docker images
+
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
