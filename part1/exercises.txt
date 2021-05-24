@@ -82,3 +82,15 @@ CMD echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http:
 # sudo docker build . -t ubuntu:curler
 # sudo docker run -it ubuntu:curler
 # helsinki.fi
+
+1.9: Volumes
+
+# touch text.log && docker run -v "$(pwd)/text.log:/usr/src/app/text.log" devopsdockeruh/simple-web-service
+
+
+1.10: Ports open
+
+# docker run -p 1111:8080 simple-web-service:web-server
+
+-- Then point your browser to localhost:1111
+
