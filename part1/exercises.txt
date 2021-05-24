@@ -90,7 +90,7 @@ CMD echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http:
 
 1.10: Ports open
 
-# docker run -p 1111:8080 simple-web-service:web-server
+# docker run -p 1111:8080 devopsdockeruh/simple-web-service server
 
 -- Then point your browser to localhost:1111
 
