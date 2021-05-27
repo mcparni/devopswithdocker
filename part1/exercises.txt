@@ -133,3 +133,58 @@ CMD ["serve","-s","-l","5000","build"]
 # docker build . -t frontend-project && docker run -p 5000:5000 frontend-project
 
 
+
+1.13: Hello, backend!
+
+Dockerfile:
+
+FROM ubuntu:18.04
+EXPOSE 8080
+COPY . .
+ENV PORT=8080
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+ENV REQUEST_ORIGIN=http://localhost:5000
+RUN apt-get update &&  apt-get -y install curl
+RUN curl https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz -o go1.16.4.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.4.linux-amd64.tar.gz
+RUN go build
+CMD ["./server"]
+
+-- Run following command
+# docker build . -t backend-project && docker run -p 8080:8080 backend-project
+
+
+1.14: Environment
+
+Dockerfile for frontend:
+
+FROM ubuntu:18.04
+EXPOSE 5000
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+COPY . .
+RUN apt-get update &&  apt-get -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt install -y nodejs
+RUN npm install
+RUN npm run build
+RUN npm install -g serve
+CMD ["serve","-s","-l","5000","build"]
+
+Dockerfile for backend:
+
+FROM ubuntu:18.04
+EXPOSE 8080
+COPY . .
+ENV PORT=8080
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+ENV REQUEST_ORIGIN=http://localhost:5000
+RUN apt-get update &&  apt-get -y install curl
+RUN curl https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz -o go1.16.4.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.4.linux-amd64.tar.gz
+RUN go build
+CMD ["./server"]
+
+-- Run followin commands each in their own terminal windows
+# docker run -p 5000:5000 -it frontend-project
+# docker run -p 8080:8080 -it backend-project
+
