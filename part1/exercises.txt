@@ -188,3 +188,10 @@ CMD ["./server"]
 # docker run -p 5000:5000 -it frontend-project
 # docker run -p 8080:8080 -it backend-project
 
+
+1.15: Homework
+
+https://hub.docker.com/r/mcprn/whatip
+
+
+Done exercises 15/16. Skipped exercise is 1.16: Heroku, which was NOT mandatory exercise.
