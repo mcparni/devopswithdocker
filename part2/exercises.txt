@@ -1,5 +1,7 @@
 2.1:
 
+docker-compose.yml:
+
 version: '3.5' 
 
 services: 
@@ -10,5 +12,84 @@ services:
       volumes: 
         - ./text.log:/usr/src/app/text.log
       container_name: the-sws
+
+2.2:
+
+docker-compose.yml:
+
+version: '3.5' 
+
+services: 
+
+    simple-web-service: 
+      image: devopsdockeruh/simple-web-service
+      build: . 
+      command: server
+      ports: 
+        - 8080:8080 
+      container_name: the-sws-2
+
+2.3:
+
+# I already have the images done in previous exercise set:
+# frontend-project and backend-project. Following solution
+# assumes they are present.
+
+docker-compose.yml:
+
+version: '3.5' 
+
+services: 
+    frontend-service: 
+      image: frontend-project:latest
+      environment: 
+        - REACT_APP_BACKEND_URL=http://localhost:8080
+      command: serve -s -l 5000 build
+      ports: 
+        - 5000:5000 
+      container_name: frontend
+    backend-service: 
+      image: backend-project:latest
+      environment: 
+        - REQUEST_ORIGIN=http://localhost:5000
+        - PORT=8080
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+      command: ./server
+      ports: 
+        - 8080:8080 
+      container_name: backend
+
+2.4:
+
+docker-compose.yml:
+
+version: '3.5' 
+
+services: 
+    frontend-service: 
+      image: frontend-project:latest
+      environment: 
+        - REACT_APP_BACKEND_URL=http://localhost:8080
+      command: serve -s -l 5000 build
+      ports: 
+        - 5000:5000 
+      container_name: frontend
+    backend-service: 
+      image: backend-project:latest
+      environment: 
+        - REDIS_HOST=redis
+        - REQUEST_ORIGIN=http://localhost:5000
+        - PORT=8080
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+      command: ./server
+      ports: 
+        - 8080:8080 
+      container_name: backend
+    redis-service:
+      image: redis
+      ports: 
+          - 6379:6379
+      container_name: redis
+
 
 
