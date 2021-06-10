@@ -92,4 +92,56 @@ services:
       container_name: redis
 
 
+2.5:
+I hope I got this right, but here goes:
+
+I just ran this commmand:
+docker-compose up --scale compute=3
+
+I opened up three browser windows and clicked 'Press here to test your solution' on each of them. Then I got 'Congratulations' text next to button.
+
+
+
+2.6:
+
+docker-compose.yml:
+
+version: '3.5' 
+
+services: 
+    frontend-service: 
+      image: frontend-project:latest
+      environment: 
+        - REACT_APP_BACKEND_URL=http://localhost:8080
+      command: serve -s -l 5000 build
+      ports: 
+        - 5000:5000 
+      container_name: frontend
+    backend-service: 
+      image: backend-project:latest
+      environment: 
+        - POSTGRES_HOST=db-service
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - REDIS_HOST=redis
+        - REQUEST_ORIGIN=http://localhost:5000
+        - PORT=8080
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+      command: ./server
+      ports: 
+        - 8080:8080 
+      container_name: backend
+    redis-service:
+      image: redis
+      ports: 
+          - 6379:6379
+      container_name: redis
+    db-service:
+      image: postgres
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      
+
 
