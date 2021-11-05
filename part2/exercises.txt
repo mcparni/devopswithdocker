@@ -144,7 +144,31 @@ services:
         - POSTGRES_PASSWORD=postgres
 
 2.7:
-Not done
+docker-compose.yml:
+
+version: '3.5'
+
+services:
+  training-service:
+    build: ./ml-kurkkumopo-training
+    volumes:
+      - training-model:/src/model
+      - ./imgs:/src/imgs
+  backend-service:
+    build: ./ml-kurkkumopo-backend
+    volumes:
+      - training-model:/src/model
+    depends_on:
+      - training-service
+    ports:
+      - 5000:5000
+  frontend-service:
+    build: ./ml-kurkkumopo-frontend
+    ports:
+      - 3000:3000
+volumes:
+  training-model:
+
 
 2.8:
 Following nginx.conf is required
