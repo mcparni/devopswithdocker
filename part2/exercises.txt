@@ -171,7 +171,7 @@ volumes:
 
 
 2.8:
-Following nginx.conf is required
+Following nginx.conf is required:
 
 events { worker_connections 1024; }
 
@@ -237,6 +237,125 @@ services:
       depends_on:
         - frontend-service
         - backend-service
+
+
+2.9:
+docker-compose.yaml:
+
+version: '3.5'
+
+services:
+    frontend-service:
+      image: frontend-project:latest
+      environment:
+        - REACT_APP_BACKEND_URL=http://localhost:8080
+      command: serve -s -l 5000 build
+      ports:
+        - 5000:5000
+      container_name: frontend
+    backend-service:
+      image: backend-project:latest
+      environment:
+        - POSTGRES_HOST=db-service
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - REDIS_HOST=redis
+        - REQUEST_ORIGIN=http://localhost:5000
+        - PORT=8080
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+      command: ./server
+      ports:
+        - 8080:8080
+      container_name: backend
+    redis-service:
+      image: redis
+      ports:
+          - 6379:6379
+      container_name: redis
+    db-service:
+      image: postgres
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      volumes:
+        - ./database:/var/lib/postgresql/data
+
+2.10:
+The main fix here was the cors issue. Before the localhost:5000 was allowed, now with nginx the port 5000 is omitted thus it is different origin. Changing request origin http://localhost:5000 -> http://localhost fixed the buttons. That is changing the REQUEST_ORIGIN environment variable in backend. So returning nginx.conf file and docker-compose.yml and it is working.
+
+nginx.conf:
+ 
+events { worker_connections 1024; }
+
+  http {
+    server {
+      listen 80;
+
+      location / {
+        proxy_pass http://frontend-service:5000/;
+      }
+
+      location /api/ {
+        proxy_set_header Host $host;
+        proxy_pass http://backend-service:8080/;
+      }
+    }
+  }
+
+docker-compose.yaml:
+
+version: '3.5' 
+
+services: 
+    frontend-service: 
+      image: frontend-project:latest
+      environment: 
+        - REACT_APP_BACKEND_URL=http://localhost:8080
+      command: serve -s -l 5000 build
+      ports: 
+        - 5000:5000 
+      container_name: frontend-service
+    backend-service: 
+      image: backend-project:latest
+      environment: 
+        - POSTGRES_HOST=db-service
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - REDIS_HOST=redis
+        - REQUEST_ORIGIN=http://localhost
+        - PORT=8080
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+      command: ./server
+      ports: 
+        - 8080:8080 
+      container_name: backend-service
+    redis-service:
+      image: redis
+      ports: 
+          - 6379:6379
+      container_name: redis
+    db-service:
+      image: postgres
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      volumes:
+        - ./database:/var/lib/postgresql/data
+    web:
+      image: nginx
+      volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf
+      ports: 
+          - 80:80
+      depends_on:
+        - frontend-service
+        - backend-service
+
+2.11:
+NOT DONE (not mandatory). This is the only assignment from this set that is not done. 
+
 
 
 
