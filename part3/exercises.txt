@@ -1,3 +1,52 @@
 3.1:
 Repository with the deployment pipeline config:
 https://github.com/mcparni/whatip
+
+3.2:
+Not yet done
+
+3.3:
+
+frontend:
+!Note https://github.com/docker-hy/material-applications/tree/main/example-frontend needs to be in same folde as this Dockerfile:
+
+FROM ubuntu:18.04
+WORKDIR /usr/app
+EXPOSE 5000
+COPY . .
+RUN apt-get update &&  apt-get -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
+RUN apt install -y nodejs
+RUN useradd -m appuser
+RUN chown -R appuser:appuser /usr/app
+RUN chown -R appuser:appuser /usr/lib/node_modules
+USER appuser
+RUN cd /usr/app
+RUN npm install
+RUN npm run build
+USER root
+RUN npm install -g serve
+USER appuser
+RUN cd /usr/app
+CMD ["serve","-s","-l","5000","build"]
+
+backend:
+!Note https://github.com/docker-hy/material-applications/tree/main/example-backend needs to be in same folde as this Dockerfile:
+
+FROM ubuntu:18.04
+WORKDIR /usr/app
+EXPOSE 8080
+COPY . .
+ENV PORT=8080
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+ENV REQUEST_ORIGIN=http://localhost:5000
+RUN apt-get update &&  apt-get -y install curl
+RUN curl https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz -o go1.16.4.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.4.linux-amd64.tar.gz
+RUN useradd -m appuser
+RUN chown -R appuser:appuser /usr/app
+USER appuser
+RUN cd /usr/app
+RUN go build
+CMD ["./server"]
+
