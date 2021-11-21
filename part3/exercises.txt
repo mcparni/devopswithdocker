@@ -90,5 +90,42 @@ RUN apt-get update &&  apt-get -y install curl && curl https://dl.google.com/go/
 USER appuser
 CMD ["./server"]
 
+3.5:
+
+Original image sizes:
+Frontend 	456MB
+Backend		602MB
+
+frontend Dockerfile:
+
+FROM node:14-alpine3.12
+WORKDIR /usr/app
+EXPOSE 5000
+COPY . .
+RUN cd /usr/app && npm install &&  npm run build && npm install -g serve && \
+adduser -D appuser && chown -R appuser:appuser /usr/app
+USER appuser
+CMD ["serve","-s","-l","5000","build"]
+
+New frontent image size: 345MB
+
+backend Dockerfile:
+
+FROM golang:1.17.3-alpine3.13
+WORKDIR /usr/app
+EXPOSE 8080
+COPY . .
+ENV PORT=8080
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+ENV REQUEST_ORIGIN=http://localhost:5000
+RUN cd /usr/app && go build && adduser -D appuser && chown -R appuser:appuser /usr/app
+USER appuser
+CMD ["./server"]
+
+
+New backend image size: 467MB
+
+
+
 
 
