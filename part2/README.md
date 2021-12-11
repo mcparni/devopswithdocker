@@ -1,7 +1,8 @@
-2.1:
+# Part 2 :: Exercises
 
-docker-compose.yml:
-
+## 2.1:
+**docker-compose.yml**:
+```
 version: '3.5' 
 
 services: 
@@ -12,11 +13,12 @@ services:
       volumes: 
         - ./text.log:/usr/src/app/text.log
       container_name: the-sws
+```
 
-2.2:
+## 2.2:
 
-docker-compose.yml:
-
+**docker-compose.yml**:
+```
 version: '3.5' 
 
 services: 
@@ -28,15 +30,15 @@ services:
       ports: 
         - 8080:8080 
       container_name: the-sws-2
-
-2.3:
-
+```
+## 2.3:
+```
 # I already have the images done in previous exercise set:
 # frontend-project and backend-project. Following solution
 # assumes they are present.
-
-docker-compose.yml:
-
+```
+**docker-compose.yml**:
+```
 version: '3.5' 
 
 services: 
@@ -58,11 +60,11 @@ services:
       ports: 
         - 8080:8080 
       container_name: backend
+```
+## 2.4:
 
-2.4:
-
-docker-compose.yml:
-
+**docker-compose.yml**:
+```
 version: '3.5' 
 
 services: 
@@ -90,22 +92,19 @@ services:
       ports: 
           - 6379:6379
       container_name: redis
-
-
-2.5:
-I hope I got this right, but here goes:
-
+```
+## 2.5:
+I hope I got this right, but here goes:  
 I just ran this commmand:
+```
 docker-compose up --scale compute=3
-
+```
 I opened up three browser windows and clicked 'Press here to test your solution' on each of them. Then I got 'Congratulations' text next to button.
 
+## 2.6:
 
-
-2.6:
-
-docker-compose.yml:
-
+**docker-compose.yml**:
+```
 version: '3.5' 
 
 services: 
@@ -142,10 +141,10 @@ services:
       environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
-
-2.7:
-docker-compose.yml:
-
+```
+## 2.7:
+**docker-compose.yml**:
+```
 version: '3.5'
 
 services:
@@ -168,11 +167,11 @@ services:
       - 3000:3000
 volumes:
   training-model:
+```
 
-
-2.8:
-Following nginx.conf is required:
-
+## 2.8:
+Following **nginx.conf** is required:
+```
 events { worker_connections 1024; }
 
   http {
@@ -189,9 +188,9 @@ events { worker_connections 1024; }
       }
     }
   }
-      
-docker-compose.yaml:
-
+```      
+**docker-compose.yaml**:
+```
 version: '3.5' 
 
 services: 
@@ -237,11 +236,11 @@ services:
       depends_on:
         - frontend-service
         - backend-service
+```
 
-
-2.9:
-docker-compose.yaml:
-
+## 2.9:
+**docker-compose.yaml**:
+```
 version: '3.5'
 
 services:
@@ -280,12 +279,11 @@ services:
         - POSTGRES_PASSWORD=postgres
       volumes:
         - ./database:/var/lib/postgresql/data
-
-2.10:
-The main fix here was the cors issue. Before the localhost:5000 was allowed, now with nginx the port 5000 is omitted thus it is different origin. Changing request origin http://localhost:5000 -> http://localhost fixed the buttons. That is changing the REQUEST_ORIGIN environment variable in backend. So returning nginx.conf file and docker-compose.yml and it is working.
-
-nginx.conf:
- 
+```
+## 2.10:
+The main fix here was the cors issue. Before the localhost:5000 was allowed, now with nginx the port 5000 is omitted thus it is different origin. Changing request origin http://localhost:5000 -> http://localhost fixed the buttons. That is changing the REQUEST_ORIGIN environment variable in backend. So returning nginx.conf file and docker-compose.yml and it is working.  
+**nginx.conf**:
+ ```
 events { worker_connections 1024; }
 
   http {
@@ -302,9 +300,9 @@ events { worker_connections 1024; }
       }
     }
   }
-
-docker-compose.yaml:
-
+```
+**docker-compose.yaml**:
+```
 version: '3.5' 
 
 services: 
@@ -352,10 +350,7 @@ services:
       depends_on:
         - frontend-service
         - backend-service
-
-2.11:
-NOT DONE (not mandatory). This is the only assignment from this set that is not done. 
-
-
+```
+Done exercises 10/11. Skipped exercise is **2.11**, which was **NOT** mandatory exercise.
 
 
